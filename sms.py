@@ -17,11 +17,12 @@ if (auth.text.split(':', 1)[0] != 'OK'):
     print "auth failure"
     sys.exit(1)
 
-reqPayload = {'session_id': session_id, 'to': sys.argv[1], 'text': sys.argv[2], 'from': sender_id}
-send_message = requests.get(sendurl, params=reqPayload)
+sendPayload = {'session_id': session_id, 'to': sys.argv[1], 'text': sys.argv[2], 'from': sender_id}
+send_message = requests.get(sendurl, params=sendPayload)
 
 if (send_message.status_code == 200):
-    sys.exit(0)
+	print send_message.text
+	sys.exit(0)
 else:
     print send_message.text
     sys.exit(1)
