@@ -6,7 +6,7 @@ import requests, sys
 
 baseurl = "http://api.clickatell.com"
 sendurl = baseurl + "/http/sendmsg"
-callback = 7
+callback = 0
 user = ""
 password = ""
 api_id = ""
