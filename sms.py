@@ -2,15 +2,26 @@
 
 # vim:ts=4
 
-import requests, sys
+import requests, sys, argparse
 
 baseurl = "http://api.clickatell.com"
 sendurl = baseurl + "/http/sendmsg"
+
+# Settings - TODO: move to config file
 callback = 0
 user = ""
 password = ""
 api_id = ""
 sender_id = ""
+
+# Parse commandline args
+parser = argparse.ArgumentParser()
+parser.add_argument("-n", "--number", help = "Specify number to send text message to.", required=True, type=str)
+parser.add_argument("-m", "--message", help = "Provide text to send.", required=True, type=str)
+args = parser.parse_args()
+destination = args.number
+message = args.message
+
 
 def getConcat(message):
 	messagelen = len(message)
@@ -34,7 +45,7 @@ if (auth.text.split(':', 1)[0] != 'OK'):
 	print "auth failure"
 	sys.exit(1)
 
-sendPayload = {'session_id': session_id, 'to': sys.argv[1], 'text': sys.argv[2], 'from': sender_id, \
+sendPayload = {'session_id': session_id, 'to': destination, 'text': message, 'from': sender_id, \
 	'concat': concatNo}
 send_message = requests.get(sendurl, params=sendPayload)
 

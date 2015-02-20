@@ -1,3 +1,2 @@
 1. Split configuration out to dedicated config file
-2. Add argument parsing
-3. Add support for callbacks, i.e. for DSN.
+2. Add support for callbacks, i.e. for DSN.
