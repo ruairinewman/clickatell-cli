@@ -1,2 +1,3 @@
-1. Add multipart SMS message for "long" SMS.
+1. Add argument parsing
+2. Add support for callbacks, i.e. for DSN.
 
