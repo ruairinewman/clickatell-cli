@@ -2,17 +2,20 @@
 
 # vim:ts=4
 
-import requests, sys, argparse
+import requests, sys, os, argparse, ConfigParser
 
 baseurl = "http://api.clickatell.com"
 sendurl = baseurl + "/http/sendmsg"
+config = os.environ["HOME"] + "/.sms.cfg"
 
-# Settings - TODO: move to config file
-callback = 0
-user = ""
-password = ""
-api_id = ""
-sender_id = ""
+# Settings
+settings = ConfigParser.ConfigParser()
+settings.read(config)
+callback = int(settings.get('settings', 'callback'))
+user = settings.get('credentials', 'user')
+password = settings.get('credentials', 'password')
+api_id = settings.get('credentials', 'api_id')
+sender_id = settings.get('credentials', 'sender_id')
 
 # Parse commandline args
 parser = argparse.ArgumentParser()

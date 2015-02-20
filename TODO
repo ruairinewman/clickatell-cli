@@ -1,2 +1,2 @@
-1. Split configuration out to dedicated config file
+1. Add option to specify location of config file
 2. Add support for callbacks, i.e. for DSN.
