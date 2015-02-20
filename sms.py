@@ -6,7 +6,19 @@ import requests, sys, os, argparse, ConfigParser
 
 baseurl = "http://api.clickatell.com"
 sendurl = baseurl + "/http/sendmsg"
-config = os.environ["HOME"] + "/.sms.cfg"
+
+# Parse commandline args
+parser = argparse.ArgumentParser()
+parser.add_argument("-n", "--number", help = "Specify number to send text message to.", required=True, type=str)
+parser.add_argument("-m", "--message", help = "Provide text to send.", required=True, type=str)
+parser.add_argument("-c", "--conf", help = "Specify config file. (Default: ~/.sms.cfg", required=False, type=str)
+args = parser.parse_args()
+destination = args.number
+message = args.message
+if args.conf:
+	config = args.conf
+else:
+	config = os.environ["HOME"] + "/.sms.cfg"
 
 # Settings
 settings = ConfigParser.ConfigParser()
@@ -16,15 +28,6 @@ user = settings.get('credentials', 'user')
 password = settings.get('credentials', 'password')
 api_id = settings.get('credentials', 'api_id')
 sender_id = settings.get('credentials', 'sender_id')
-
-# Parse commandline args
-parser = argparse.ArgumentParser()
-parser.add_argument("-n", "--number", help = "Specify number to send text message to.", required=True, type=str)
-parser.add_argument("-m", "--message", help = "Provide text to send.", required=True, type=str)
-args = parser.parse_args()
-destination = args.number
-message = args.message
-
 
 def getConcat(message):
 	messagelen = len(message)
