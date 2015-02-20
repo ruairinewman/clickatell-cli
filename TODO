@@ -1,1 +1,2 @@
-1. Add support for callbacks, i.e. for DSN.
+ * Add addressbook section to config file
+ * Add support for callbacks, i.e. for DSN.
