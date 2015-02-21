@@ -1,2 +1,2 @@
- * Add addressbook section to config file
+ * Add support for addressbook "groups"
  * Add support for callbacks, i.e. for DSN.

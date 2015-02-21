@@ -9,12 +9,14 @@ sendurl = baseurl + "/http/sendmsg"
 
 # Parse commandline args
 parser = argparse.ArgumentParser()
-parser.add_argument("-n", "--number", help = "Specify number to send text message to.", required=True, type=str)
+parser.add_argument("-a", "--abname", help = "Name of contact in address book", required=False, type=str)
+parser.add_argument("-n", "--number", help = "Specify number to send text message to.", required=False, type=str)
 parser.add_argument("-m", "--message", help = "Provide text to send.", required=True, type=str)
 parser.add_argument("-c", "--conf", help = "Specify config file. (Default: ~/.sms.cfg)", required=False, type=str)
 args = parser.parse_args()
-destination = args.number
 message = args.message
+
+# Config location
 if args.conf:
 	config = args.conf
 else:
@@ -29,6 +31,16 @@ password = settings.get('credentials', 'password')
 api_id = settings.get('credentials', 'api_id')
 sender_id = settings.get('credentials', 'sender_id')
 
+# Look up address book
+if args.abname:
+	destination = settings.get('addressbook', args.abname)
+elif args.number:
+	destination = args.number
+else:
+	print "No destination."
+	sys.exit(1)
+
+# Concat - message length handling
 def getConcat(message):
 	messagelen = len(message)
 	if (messagelen > 459):
