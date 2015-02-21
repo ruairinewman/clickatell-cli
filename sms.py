@@ -8,9 +8,10 @@ baseurl = "http://api.clickatell.com"
 sendurl = baseurl + "/http/sendmsg"
 
 # Parse commandline args
-parser = argparse.ArgumentParser()
-parser.add_argument("-a", "--abname", help = "Name of contact in address book", required=False, type=str)
-parser.add_argument("-n", "--number", help = "Specify number to send text message to.", required=False, type=str)
+parser = argparse.ArgumentParser(description="Commandline Client for Clickatell SMS API")
+group = parser.add_mutually_exclusive_group()
+group.add_argument("-a", "--abname", help = "Name of contact in address book", required=False, type=str)
+group.add_argument("-n", "--number", help = "Specify number to send text message to.", required=False, type=str)
 parser.add_argument("-m", "--message", help = "Provide text to send.", required=True, type=str)
 parser.add_argument("-c", "--conf", help = "Specify config file. (Default: ~/.sms.cfg)", required=False, type=str)
 args = parser.parse_args()
