@@ -1,7 +1,7 @@
 # clickatell-cli
 Simple Python-based Clickatell CLI.
 
-Syntax: $ ./sms.py [-a NAME | -n "Destination Phone Number"] -m "Text message" [-c "Path to config file"]
+Syntax: $ ./sms.py [-a NAME | -n "Destination Phone Number"] -m "Text message" [-c "Path to config file"] [-f]
 
 Note: the destination phone number should omit the international dialling prefix but include the destination 
 country code. For example, for an Irish phone number, locally 088-765-4321, the number specified would be 353887654321.
@@ -11,3 +11,4 @@ country code. For example, for an Irish phone number, locally 088-765-4321, the 
  * Long (> 160 character) messages handled.
  * Reads configuration from .sms.cfg in users home directory by default, or from file specified.
  * Supports name=number mapping in addressbook (config file)
+ * Supports SMS Flash messages

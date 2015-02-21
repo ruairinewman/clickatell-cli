@@ -14,8 +14,15 @@ group.add_argument("-a", "--abname", help = "Name of contact in address book", r
 group.add_argument("-n", "--number", help = "Specify number to send text message to.", required=False, type=str)
 parser.add_argument("-m", "--message", help = "Provide text to send.", required=True, type=str)
 parser.add_argument("-c", "--conf", help = "Specify config file. (Default: ~/.sms.cfg)", required=False, type=str)
+parser.add_argument("-f", "--flash", help = "Send as SMS 'Flash' message type.", required=False, action="store_true")
 args = parser.parse_args()
 message = args.message
+
+# Flash message?
+if args.flash:
+	message_type = "SMS_FLASH"
+else:
+	message_type = "SMS_TEXT"
 
 # Config location
 if args.conf:
@@ -65,7 +72,7 @@ if (auth.text.split(':', 1)[0] != 'OK'):
 	sys.exit(1)
 
 sendPayload = {'session_id': session_id, 'to': destination, 'text': message, 'from': sender_id, \
-	'concat': concatNo}
+	'concat': concatNo, 'msg_type': message_type}
 send_message = requests.get(sendurl, params=sendPayload)
 
 if (send_message.status_code == 200):
