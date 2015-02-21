@@ -1,2 +1,3 @@
+ * Add SMS "flash" support
  * Add support for addressbook "groups"
  * Add support for callbacks, i.e. for DSN.
