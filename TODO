@@ -1,3 +1,4 @@
  * Add SMS "flash" support
  * Add support for addressbook "groups"
+ * Add ability to set user-agent
  * Add support for callbacks, i.e. for DSN.
