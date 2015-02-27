@@ -7,16 +7,26 @@ import requests, sys, os, argparse, ConfigParser
 baseurl = "http://api.clickatell.com"
 sendurl = baseurl + "/http/sendmsg"
 
+# Message shell
+def get_message_from_shell():
+	print "Enter message to send. <Ctrl-D> to finish:"
+	return sys.stdin.readlines()
+
 # Parse commandline args
 parser = argparse.ArgumentParser(description="Commandline Client for Clickatell SMS API")
-group = parser.add_mutually_exclusive_group()
-group.add_argument("-a", "--abname", help = "Name of contact in address book", required=False, type=str)
-group.add_argument("-n", "--number", help = "Specify number to send text message to.", required=False, type=str)
-parser.add_argument("-m", "--message", help = "Provide text to send.", required=True, type=str)
+contactgroup = parser.add_mutually_exclusive_group()
+contactgroup.add_argument("-a", "--abname", help = "Name of contact in address book", required=False, type=str)
+contactgroup.add_argument("-n", "--number", help = "Specify number to send text message to.", required=False, type=str)
+messagegroup = parser.add_mutually_exclusive_group()
+messagegroup.add_argument("-m", "--message", help = "Provide text to send.", required=False, type=str)
+messagegroup.add_argument("-s", "--shell", help = "Message shell", required=False, action="store_true")
 parser.add_argument("-c", "--conf", help = "Specify config file. (Default: ~/.sms.cfg)", required=False, type=str)
 parser.add_argument("-f", "--flash", help = "Send as SMS 'Flash' message type.", required=False, action="store_true")
 args = parser.parse_args()
-message = args.message
+if not args.shell:
+	message = args.message
+else:
+	message = get_message_from_shell()
 
 # Flash message?
 if args.flash:
@@ -71,8 +81,14 @@ if (auth.text.split(':', 1)[0] != 'OK'):
 	print "auth failure"
 	sys.exit(1)
 
-sendPayload = {'session_id': session_id, 'to': destination, 'text': message, 'from': sender_id, \
-	'concat': concatNo, 'msg_type': message_type}
+sendPayload = {\
+	'session_id': session_id, \
+	'to': destination, \
+	'text': message, \
+	'from': sender_id, \
+	'concat': concatNo, \
+	'msg_type': message_type\
+}
 send_message = requests.get(sendurl, params=sendPayload)
 
 if (send_message.status_code == 200):
