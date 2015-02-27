@@ -11,6 +11,7 @@ optional arguments:
  * -a ABNAME, --abname ABNAME          Name of contact in address book
  * -n NUMBER, --number NUMBER          Specify number to send text message to.
  * -m MESSAGE, --message MESSAGE       Provide text to send.
+ * -s --shell                          Message shell - use to avoid issues with shell parsing of text
  * -c CONF, --conf CONF                Specify config file. (Default: ~/.sms.cfg)
  * -f, --flash                         Send as SMS 'Flash' message type.
 
