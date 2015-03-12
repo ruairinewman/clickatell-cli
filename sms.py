@@ -72,7 +72,8 @@ def getConcat(message):
 		concatNo = 3
 	return concatNo
 
-concatNo = getConcat(sys.argv[2])
+str_message = ''.join(message)
+concatNo = getConcat(str_message)
 
 sessRequest = ("/http/auth/?user=%s&password=%s&api_id=%s&callback=%d" % (user, password, api_id, callback))
 auth = requests.get(baseurl + sessRequest)
@@ -84,7 +85,7 @@ if (auth.text.split(':', 1)[0] != 'OK'):
 sendPayload = {\
 	'session_id': session_id, \
 	'to': destination, \
-	'text': message, \
+	'text': str_message, \
 	'from': sender_id, \
 	'concat': concatNo, \
 	'msg_type': message_type\
