@@ -9,7 +9,7 @@ sendurl = baseurl + "/http/sendmsg"
 
 # Message shell
 def get_message_from_shell():
-	print "Enter message to send. <Ctrl-D> to finish:"
+	print "Enter message to send. <Ctrl-D> to finish, <Ctrl-C> to close: "
 	return sys.stdin.readlines()
 
 # Parse commandline args
@@ -22,6 +22,7 @@ messagegroup.add_argument("-m", "--message", help = "Provide text to send.", req
 messagegroup.add_argument("-s", "--shell", help = "Message shell", required=False, action="store_true")
 parser.add_argument("-c", "--conf", help = "Specify config file. (Default: ~/.sms.cfg)", required=False, type=str)
 parser.add_argument("-f", "--flash", help = "Send as SMS 'Flash' message type.", required=False, action="store_true")
+parser.add_argument("-v", "--verbose", help = "Display additional information.", required=False, action="store_true")
 args = parser.parse_args()
 if not args.shell:
 	message = args.message
@@ -93,8 +94,14 @@ sendPayload = {\
 send_message = requests.get(sendurl, params=sendPayload)
 
 if (send_message.status_code == 200):
-	print send_message.text
+	if args.verbose:
+		print "Success!"
+		print "Request: '%s', '%s'" % (sendurl, sendPayload)
+		print send_message.text
 	sys.exit(0)
 else:
-	print send_message.text
+	if args.verbose:
+		print "Fail!"
+		print "Request: '%s', '%s'" % (sendurl, sendPayload)
+		print send_message.text
 	sys.exit(1)
