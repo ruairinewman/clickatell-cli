@@ -1,3 +1,7 @@
+ * Trap <Ctrl-C> for graceful exit
+ * Add to addressbook from CLI
+ * List addressbook from CLI
+ * Add sane error checking for config
  * Add support for addressbook "groups"
  * Add ability to set user-agent
  * Add support for callbacks, i.e. for DSN.
