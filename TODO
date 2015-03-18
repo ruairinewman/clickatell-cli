@@ -1,4 +1,3 @@
- * Trap <Ctrl-C> for graceful exit
  * Add to addressbook from CLI
  * List addressbook from CLI
  * Add sane error checking for config

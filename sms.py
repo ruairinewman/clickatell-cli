@@ -2,10 +2,16 @@
 
 # vim:ts=4
 
-import requests, sys, os, argparse, ConfigParser
+import requests, sys, os, argparse, ConfigParser, signal
 
 baseurl = "http://api.clickatell.com"
 sendurl = baseurl + "/http/sendmsg"
+
+# Trap <Ctrl-C>
+def signal_handler(signal, frame):
+	print "\nExiting ...\n"
+	sys.exit(0)
+signal.signal(signal.SIGINT, signal_handler)
 
 # Message shell
 def get_message_from_shell():
