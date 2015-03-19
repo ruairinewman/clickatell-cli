@@ -93,6 +93,8 @@ auth = requests.get(authurl, params=sessionPayload)
 session_id = auth.text.split(' ', 1)[1]
 if (auth.text.split(':', 1)[0] != 'OK'):
 	print "auth failure"
+	if args.verbose:
+		print auth.text
 	sys.exit(1)
 
 sendPayload = {\
