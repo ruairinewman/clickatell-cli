@@ -2,11 +2,19 @@
 
 # vim:ts=4
 
-import requests, sys, os, argparse, ConfigParser, signal
+import requests, sys, os, argparse, ConfigParser, signal, stat
 
 baseurl = "http://api.clickatell.com"
 sendurl = baseurl + "/http/sendmsg"
 authurl = baseurl + "/http/auth/?"
+CONF_PERM = "0100600"
+
+# Check config permissions
+def check_perms(config):
+	conf_perms = str(oct(os.stat(config).st_mode))
+	if not (conf_perms == CONF_PERM):
+		print "Config file permissions not set to recommended '600'. Please rectify and run again."
+		sys.exit(4)
 
 # Trap <Ctrl-C>
 def signal_handler(signal, frame):
@@ -47,6 +55,8 @@ if args.conf:
 	config = args.conf
 else:
 	config = os.environ["HOME"] + "/.sms.cfg"
+
+check_perms(config)
 
 # Settings
 settings = ConfigParser.ConfigParser()
