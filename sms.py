@@ -6,6 +6,7 @@ import requests, sys, os, argparse, ConfigParser, signal
 
 baseurl = "http://api.clickatell.com"
 sendurl = baseurl + "/http/sendmsg"
+authurl = baseurl + "/http/auth/?"
 
 # Trap <Ctrl-C>
 def signal_handler(signal, frame):
@@ -82,8 +83,13 @@ def getConcat(message):
 str_message = ''.join(message)
 concatNo = getConcat(str_message)
 
-sessRequest = ("/http/auth/?user=%s&password=%s&api_id=%s&callback=%d" % (user, password, api_id, callback))
-auth = requests.get(baseurl + sessRequest)
+sessionPayload = {\
+	'user' : user, \
+	'password' : password, \
+	'api_id' : api_id, \
+	'callback' : callback \
+}
+auth = requests.get(authurl, params=sessionPayload)
 session_id = auth.text.split(' ', 1)[1]
 if (auth.text.split(':', 1)[0] != 'OK'):
 	print "auth failure"
