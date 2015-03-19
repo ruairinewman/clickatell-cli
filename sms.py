@@ -13,12 +13,13 @@ CONF_PERM = "0100600"
 def check_perms(config):
 	conf_perms = str(oct(os.stat(config).st_mode))
 	if not (conf_perms == CONF_PERM):
-		print "Config file permissions not set to recommended '600'. Please rectify and run again."
-		sys.exit(4)
+		if not args.force:
+			print "Config file permissions not set to recommended '600'. Please rectify and run again."
+			sys.exit(4)
 
 # Trap <Ctrl-C>
 def signal_handler(signal, frame):
-	print "\nExiting ...\n"
+	print "\nCtrl-C or SIGINT received, exiting ...\n"
 	sys.exit(0)
 signal.signal(signal.SIGINT, signal_handler)
 
@@ -38,6 +39,7 @@ messagegroup.add_argument("-s", "--shell", help = "Message shell", required=Fals
 parser.add_argument("-c", "--conf", help = "Specify config file. (Default: ~/.sms.cfg)", required=False, type=str)
 parser.add_argument("-f", "--flash", help = "Send as SMS 'Flash' message type.", required=False, action="store_true")
 parser.add_argument("-v", "--verbose", help = "Display additional information.", required=False, action="store_true")
+parser.add_argument("--force", help = "Ignore bad permissions on config file.", required=False, action="store_true")
 args = parser.parse_args()
 if not args.shell:
 	message = args.message
