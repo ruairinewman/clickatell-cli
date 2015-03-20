@@ -4,7 +4,7 @@
 
 import requests, sys, os, argparse, ConfigParser, signal, stat
 
-baseurl = "http://api.clickatell.com"
+baseurl = "https://api.clickatell.com"
 sendurl = baseurl + "/http/sendmsg"
 authurl = baseurl + "/http/auth/?"
 CONF_PERM = "0100600"
@@ -102,7 +102,7 @@ sessionPayload = {\
 	'api_id' : api_id, \
 	'callback' : callback \
 }
-auth = requests.get(authurl, params=sessionPayload, timeout=(7, 10))
+auth = requests.get(authurl, params=sessionPayload, timeout=(7, 10), verify=True)
 session_id = auth.text.split(' ', 1)[1]
 if (auth.text.split(':', 1)[0] != 'OK'):
 	print "auth failure"
@@ -121,7 +121,7 @@ sendPayload = {\
 	'concat': concatNo, \
 	'msg_type': message_type\
 }
-send_message = requests.get(sendurl, params=sendPayload, timeout=(7, 10))
+send_message = requests.get(sendurl, params=sendPayload, timeout=(7, 10), verify=True)
 
 if (send_message.status_code == 200):
 	if args.verbose:
