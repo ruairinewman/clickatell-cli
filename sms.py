@@ -72,7 +72,12 @@ sender_id = settings.get('credentials', 'sender_id')
 
 # Look up address book
 if args.abname:
-	destination = settings.get('addressbook', args.abname)
+	try:
+		destination = settings.get('addressbook', args.abname)
+	except:
+		if args.verbose:
+			print "Contact not found in address book."
+		sys.exit(3)
 elif args.number:
 	destination = args.number
 else:
@@ -102,7 +107,7 @@ sessionPayload = {\
 	'api_id' : api_id, \
 	'callback' : callback \
 }
-auth = requests.get(authurl, params=sessionPayload, timeout=(7, 10), verify=True)
+auth = requests.get(authurl, params=sessionPayload, timeout=(7), verify=True)
 session_id = auth.text.split(' ', 1)[1]
 if (auth.text.split(':', 1)[0] != 'OK'):
 	print "auth failure"
@@ -121,7 +126,7 @@ sendPayload = {\
 	'concat': concatNo, \
 	'msg_type': message_type\
 }
-send_message = requests.get(sendurl, params=sendPayload, timeout=(7, 10), verify=True)
+send_message = requests.get(sendurl, params=sendPayload, timeout=(7), verify=True)
 
 if (send_message.status_code == 200):
 	if args.verbose:
