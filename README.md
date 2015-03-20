@@ -2,7 +2,7 @@
 Simple Python-based Clickatell CLI.
 
 $ ./sms.py -h
-usage: sms.py [-h] [-a ABNAME | -n NUMBER] -m MESSAGE [-c CONF] [-f]
+usage: sms.py [-h] [-a ABNAME | -n NUMBER] -m MESSAGE [-c CONF] [-f] [--force]
 
 Commandline Client for Clickatell SMS API
 
@@ -14,6 +14,7 @@ optional arguments:
  * -s --shell                          Message shell - use to avoid issues with shell parsing of text
  * -c CONF, --conf CONF                Specify config file. (Default: ~/.sms.cfg)
  * -f, --flash                         Send as SMS 'Flash' message type.
+ * --force								Override built-in permissions check on config file
  * -v --verbose						   Show more details
 
 Note: the destination phone number should omit the international dialling prefix but include the destination 
