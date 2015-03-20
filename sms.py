@@ -58,6 +58,7 @@ if args.conf:
 else:
 	config = os.environ["HOME"] + "/.sms.cfg"
 
+# Verify config file permissions
 check_perms(config)
 
 # Settings
@@ -101,13 +102,16 @@ sessionPayload = {\
 	'api_id' : api_id, \
 	'callback' : callback \
 }
-auth = requests.get(authurl, params=sessionPayload)
+auth = requests.get(authurl, params=sessionPayload, timeout=(7, 10))
 session_id = auth.text.split(' ', 1)[1]
 if (auth.text.split(':', 1)[0] != 'OK'):
 	print "auth failure"
 	if args.verbose:
 		print auth.text
 	sys.exit(1)
+else:
+	if args.verbose:
+		print auth.text
 
 sendPayload = {\
 	'session_id': session_id, \
@@ -117,7 +121,7 @@ sendPayload = {\
 	'concat': concatNo, \
 	'msg_type': message_type\
 }
-send_message = requests.get(sendurl, params=sendPayload)
+send_message = requests.get(sendurl, params=sendPayload, timeout=(7, 10))
 
 if (send_message.status_code == 200):
 	if args.verbose:
