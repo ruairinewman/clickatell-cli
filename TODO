@@ -1,3 +1,4 @@
+ * Investigate using libreadline or equivalent for message shell
  * Add to addressbook from CLI
  * List addressbook from CLI
  * Add sane error checking for config
