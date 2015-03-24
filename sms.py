@@ -2,7 +2,13 @@
 
 # vim:ts=4
 
-import requests, sys, os, argparse, ConfigParser, signal, stat
+import requests
+import sys
+import os
+import argparse
+import ConfigParser
+import signal
+import stat
 
 baseurl = "https://api.clickatell.com"
 sendurl = baseurl + "/http/sendmsg"
