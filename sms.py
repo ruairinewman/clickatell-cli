@@ -45,6 +45,23 @@ def get_message_from_shell(message_editor, verbose):
 		print "Enter message to send. <Ctrl-D> to finish, <Ctrl-C> to close: "
 		return sys.stdin.readlines()
 
+# Concat - message length handling
+def getConcat(message):
+	messagelen = len(message)
+	if (messagelen > 459):
+		print "Message length greater than 459 characters."
+		sys.exit(1)
+	elif (messagelen == 0):
+		print "Message length is 0 (zero)."
+		sys.exit(1)
+	elif (messagelen <= 160):
+		concatNo = 1
+	elif (messagelen <= 320):
+		concatNo = 2
+	else:
+		concatNo = 3
+	return concatNo
+
 # Parse commandline args
 parser = argparse.ArgumentParser(description="Commandline Client for Clickatell SMS API")
 contactgroup = parser.add_mutually_exclusive_group()
@@ -111,27 +128,10 @@ else:
 	print "No destination."
 	sys.exit(1)
 
-# Concat - message length handling
-def getConcat(message):
-	messagelen = len(message)
-	if (messagelen > 459):
-		print "Message length greater than 459 characters."
-		sys.exit(1)
-	elif (messagelen == 0):
-		print "Message length is 0 (zero)."
-		sys.exit(1)
-	elif (messagelen <= 160):
-		concatNo = 1
-	elif (messagelen <= 320):
-		concatNo = 2
-	else:
-		concatNo = 3
-	return concatNo
-
 str_message = ''.join(message)
 concatNo = getConcat(str_message)
 
-sessionPayload = {\
+sessionPayload = { \
 	'user' : user, \
 	'password' : password, \
 	'api_id' : api_id, \
@@ -148,13 +148,13 @@ else:
 	if args.verbose:
 		print auth.text
 
-sendPayload = {\
+sendPayload = { \
 	'session_id': session_id, \
 	'to': destination, \
 	'text': str_message, \
 	'from': sender_id, \
 	'concat': concatNo, \
-	'msg_type': message_type\
+	'msg_type': message_type \
 }
 
 if not args.dummy:
@@ -171,7 +171,7 @@ if (send_message.status_code == 200):
 	sys.exit(0)
 else:
 	if args.verbose:
-		print "Fail!"
+		print "Fail with status code: " + send_message.status_code
 		print "Request: '%s', '%s'" % (sendurl, sendPayload)
 		print send_message.text
 	sys.exit(1)
