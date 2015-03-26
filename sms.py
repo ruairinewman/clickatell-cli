@@ -61,12 +61,17 @@ parser.add_argument("--dummy", help = "Dummy mode. No message will be sent.", re
 parser.add_argument("-e", "--editor", help = "Use $EDITOR to edit text message.", required=False, action="store_true")
 args = parser.parse_args()
 if not args.shell:
-	message = args.message
+	if args.editor:
+		args.editor = False
+	if args.message:
+		message = args.message
+	else:
+		sys.exit(1)
 else:
 	if args.editor:
 		message = get_message_from_shell(True, args.verbose)
 	else:
-		message = get_message_from_shell()
+		message = get_message_from_shell(False, args.verbose)
 
 # Flash message?
 if args.flash:
