@@ -1,14 +1,16 @@
 #!/usr/bin/env python
 
-# vim:ts=4
+# vim:ts=4:ai:syntax
 
 import requests
 import sys
 import os
 import argparse
-import ConfigParser
+import ConfigParser as cp
 import signal
 import stat
+import subprocess
+import tempfile
 
 baseurl = "https://api.clickatell.com"
 sendurl = baseurl + "/http/sendmsg"
@@ -30,9 +32,18 @@ def signal_handler(signal, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 # Message shell
-def get_message_from_shell():
-	print "Enter message to send. <Ctrl-D> to finish, <Ctrl-C> to close: "
-	return sys.stdin.readlines()
+def get_message_from_shell(message_editor):
+	if message_editor == True:
+		f, fname = tempfile.mkstemp()
+		editor = os.environ.get('EDITOR', 'vi') + ' ' + fname
+		subprocess.call([editor, fname], shell=True)
+		with open(fname, 'r') as f:
+			return f.read()
+		f.close()
+		os.unlink(fname)
+	else:
+		print "Enter message to send. <Ctrl-D> to finish, <Ctrl-C> to close: "
+		return sys.stdin.readlines()
 
 # Parse commandline args
 parser = argparse.ArgumentParser(description="Commandline Client for Clickatell SMS API")
@@ -46,11 +57,16 @@ parser.add_argument("-c", "--conf", help = "Specify config file. (Default: ~/.sm
 parser.add_argument("-f", "--flash", help = "Send as SMS 'Flash' message type.", required=False, action="store_true")
 parser.add_argument("-v", "--verbose", help = "Display additional information.", required=False, action="store_true")
 parser.add_argument("--force", help = "Ignore bad permissions on config file.", required=False, action="store_true")
+parser.add_argument("--dummy", help = "Dummy mode. No message will be sent.", required=False, action="store_true")
+parser.add_argument("-e", "--editor", help = "Use $EDITOR to edit text message.", required=False, action="store_true")
 args = parser.parse_args()
 if not args.shell:
 	message = args.message
 else:
-	message = get_message_from_shell()
+	if args.editor:
+		message = get_message_from_shell(True)
+	else:
+		message = get_message_from_shell()
 
 # Flash message?
 if args.flash:
@@ -68,7 +84,7 @@ else:
 check_perms(config)
 
 # Settings
-settings = ConfigParser.ConfigParser()
+settings = cp.ConfigParser()
 settings.read(config)
 callback = int(settings.get('settings', 'callback'))
 user = settings.get('credentials', 'user')
@@ -132,7 +148,12 @@ sendPayload = {\
 	'concat': concatNo, \
 	'msg_type': message_type\
 }
-send_message = requests.get(sendurl, params=sendPayload, timeout=(7), verify=True)
+
+if not args.dummy:
+	send_message = requests.get(sendurl, params=sendPayload, timeout=(7), verify=True)
+else:
+	print "Dummy mode set. No message sent."
+	sys.exit(255)
 
 if (send_message.status_code == 200):
 	if args.verbose:
