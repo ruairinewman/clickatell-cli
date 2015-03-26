@@ -1,7 +1,7 @@
- * Investigate using libreadline or equivalent for message shell
+ * URGENT: Clean up temp file left in /tmp
  * Add to addressbook from CLI
  * List addressbook from CLI
  * Add sane error checking for config
  * Add support for addressbook "groups"
  * Add ability to set user-agent
- * Add support for callbacks, i.e. for DSN.
+ * Add support for callbacks, i.e. for DSN. (?)

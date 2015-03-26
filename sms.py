@@ -32,15 +32,15 @@ def signal_handler(signal, frame):
 signal.signal(signal.SIGINT, signal_handler)
 
 # Message shell
-def get_message_from_shell(message_editor):
+def get_message_from_shell(message_editor, verbose):
 	if message_editor == True:
 		f, fname = tempfile.mkstemp()
+		if verbose == True:
+			print "Msg editor temp file: " + fname
 		editor = os.environ.get('EDITOR', 'vi') + ' ' + fname
-		subprocess.call([editor, fname], shell=True)
+		subprocess.call(editor, shell=True)
 		with open(fname, 'r') as f:
 			return f.read()
-		f.close()
-		os.unlink(fname)
 	else:
 		print "Enter message to send. <Ctrl-D> to finish, <Ctrl-C> to close: "
 		return sys.stdin.readlines()
@@ -64,7 +64,7 @@ if not args.shell:
 	message = args.message
 else:
 	if args.editor:
-		message = get_message_from_shell(True)
+		message = get_message_from_shell(True, args.verbose)
 	else:
 		message = get_message_from_shell()
 
@@ -111,6 +111,9 @@ def getConcat(message):
 	messagelen = len(message)
 	if (messagelen > 459):
 		print "Message length greater than 459 characters."
+		sys.exit(1)
+	elif (messagelen == 0):
+		print "Message length is 0 (zero)."
 		sys.exit(1)
 	elif (messagelen <= 160):
 		concatNo = 1
