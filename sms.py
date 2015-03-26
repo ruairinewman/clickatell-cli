@@ -23,7 +23,7 @@ def check_perms(config):
 	if not (conf_perms == CONF_PERM):
 		if not args.force:
 			print "Config file permissions not set to recommended '600'. Please rectify and run again."
-			sys.exit(4)
+			sys.exit(1)
 
 # Trap <Ctrl-C>
 def signal_handler(signal, frame):
