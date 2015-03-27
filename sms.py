@@ -40,7 +40,10 @@ def get_message_from_shell(message_editor, verbose):
 		editor = os.environ.get('EDITOR', 'vi') + ' ' + fname
 		subprocess.call(editor, shell=True)
 		with open(fname, 'r') as f:
-			return f.read()
+			text = f.read()
+			f.close()
+			os.unlink(fname)
+			return text
 	else:
 		print "Enter message to send. <Ctrl-D> to finish, <Ctrl-C> to close: "
 		return sys.stdin.readlines()
