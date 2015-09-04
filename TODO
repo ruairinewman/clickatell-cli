@@ -5,3 +5,5 @@
  * Add ability to set user-agent
  * Add support for callbacks, i.e. for DSN. (?)
  * Change permissions to use dict, i.e. CONF_PERM = { 'O_RW' : '0100600', 'OG_R' : '0100440' }
+ * Add option to disable logging
+ * Add option to specify alternate log location
