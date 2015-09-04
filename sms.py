@@ -11,11 +11,13 @@ import signal
 import stat
 import subprocess
 import tempfile
+import datetime
 
 baseurl = "https://api.clickatell.com"
 sendurl = baseurl + "/http/sendmsg"
 authurl = baseurl + "/http/auth/?"
 CONF_PERM = "0100600"
+logfile = os.environ["HOME"] + "/.sms.log"
 
 # Check config permissions
 def check_perms(config):
@@ -64,6 +66,13 @@ def getConcat(message):
 	else:
 		concatNo = 3
 	return concatNo
+
+# LogSMS - log all details to a file
+def logsms(fname, logentry):
+	smsdatetime = str(datetime.datetime.now())
+	logfile = open(fname, 'a+')
+	logfile.write("\n" + smsdatetime + logentry)
+	logfile.close()
 
 # Parse commandline args
 parser = argparse.ArgumentParser(description="Commandline Client for Clickatell SMS API")
@@ -171,10 +180,12 @@ if (send_message.status_code == 200):
 		print "Success!"
 		print "Request: '%s', '%s'" % (sendurl, sendPayload)
 		print send_message.text
+	logsms(logfile, " SUCCESS: " + str(sendPayload))
 	sys.exit(0)
 else:
 	if args.verbose:
 		print "Fail with status code: " + send_message.status_code
-		print "Request: '%s', '%s'" % (sendurl, sendPayload)
+		print "Request: '%s', '%s'" % (sendurl, str(sendPayload))
 		print send_message.text
+	logsms(logfile, " FAIL: " + sendPayload)
 	sys.exit(1)
