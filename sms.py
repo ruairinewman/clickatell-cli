@@ -68,11 +68,12 @@ def getConcat(message):
 	return concatNo
 
 # LogSMS - log all details to a file
-def logsms(fname, logentry):
-	smsdatetime = str(datetime.datetime.now())
-	logfile = open(fname, 'a+')
-	logfile.write("\n" + smsdatetime + logentry)
-	logfile.close()
+def logsms(fname, logentry, enabled):
+  if enabled > 0:
+    smsdatetime = str(datetime.datetime.now())
+    logfile = open(fname, 'a+')
+    logfile.write("\n" + smsdatetime + logentry)
+    logfile.close()
 
 # Parse commandline args
 parser = argparse.ArgumentParser(description="Commandline Client for Clickatell SMS API")
@@ -88,6 +89,7 @@ parser.add_argument("-v", "--verbose", help = "Display additional information.",
 parser.add_argument("--force", help = "Ignore bad permissions on config file.", required=False, action="store_true")
 parser.add_argument("--dummy", help = "Dummy mode. No message will be sent.", required=False, action="store_true")
 parser.add_argument("-e", "--editor", help = "Use $EDITOR to edit text message.", required=False, action="store_true")
+parser.add_argument("-l", "--log_enabled", help = "Log message true/false (Default true)", required=False, type=str)
 args = parser.parse_args()
 if not args.shell:
 	if args.editor:
@@ -101,6 +103,15 @@ else:
 		message = get_message_from_shell(True, args.verbose)
 	else:
 		message = get_message_from_shell(False, args.verbose)
+
+if not args.log_enabled:
+  log_enabled = 1
+elif args.log_enabled == "false":
+  log_enabled = 0
+elif args.log_enabled == "true":
+  log_enabled == 1
+else:
+  sys.exit(1)
 
 # Flash message?
 if args.flash:
@@ -180,7 +191,7 @@ if (send_message.status_code == 200):
 		print "Success!"
 		print "Request: '%s', '%s'" % (sendurl, sendPayload)
 		print send_message.text
-	logsms(logfile, " SUCCESS: " + str(sendPayload))
+	logsms(logfile, " SUCCESS: " + str(sendPayload), log_enabled)
 	sys.exit(0)
 else:
 	if args.verbose:
