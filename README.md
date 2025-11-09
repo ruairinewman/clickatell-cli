@@ -1,5 +1,20 @@
 # clickatell-cli
-Simple Python-based Clickatell CLI.
+Simple Python 3 based Clickatell CLI - refactored for performance and ease of use.
+
+**Python 3.7+ compatible** (tested up to Python 3.14)
+
+## Installation
+
+```bash
+pip install requests
+chmod +x sms.py
+```
+
+## Requirements
+- Python 3.7 or higher
+- requests library
+
+## Usage
 
 $ ./sms.py -h
 usage: sms.py [-h] [-a ABNAME | -n NUMBER] -m MESSAGE [-c CONF] [-f] [--force]
@@ -26,3 +41,16 @@ country code. For example, for an Irish phone number, locally 088-765-4321, the 
  * Reads configuration from .sms.cfg in users home directory by default, or from file specified.
  * Supports name=number mapping in addressbook (config file)
  * Supports SMS Flash messages
+
+## Recent Refactoring (2024)
+
+This codebase has been refactored for improved performance and maintainability:
+- ✅ Python 3.14 compatible with type hints
+- ✅ Connection pooling for better performance
+- ✅ Automatic retry logic with exponential backoff
+- ✅ Better error handling with custom exceptions
+- ✅ Organized class-based structure
+- ✅ Improved logging with Python logging module
+- ✅ All existing functionality preserved
+
+See [REFACTORING.md](REFACTORING.md) for complete details.
